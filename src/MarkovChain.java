@@ -1,84 +1,18 @@
-//import org.knowm.xchart.*;
-
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.XYSeries;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
-/* Charts made with the Java Library: https://knowm.org/open-source/xchart/ */
-
-
-
-public class SyntheticGeneration {
+public class MarkovChain {
     public static void main(String [] args){
 
-        // print
-
-
-
-        // uniform
-
-        //uniformDist(10, 10, 10);
-
-        bostonData();
-
-        //uniformDist(50,50,50);
-
-        // normal
-
-
+        uniformDist(5, 50, 50);
 
     }
-
-    public static void bostonData(){
-
-        /*
-        File file = new File("boston_strangler_data.txt");
-        int numPoints = 13;
-*/
-
-        File file = new File("boston_strangler_data_no_outlier.txt");
-        int numPoints = 12;
-
-        FileInputStream fis = null;
-        Scanner scan;
-
-        double [] xPoints = new double [numPoints]; // known
-        double [] yPoints = new double [numPoints];
-
-        try{
-            fis = new FileInputStream(file);
-            scan = new Scanner(fis);
-
-            for(int i = 0; i < numPoints; i++){
-                xPoints[i] = scan.nextDouble();
-                yPoints[i] = scan.nextDouble();
-            }
-
-            scan.close();
-            fis.close();
-
-
-            makeChart(xPoints, yPoints);
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-
-
-
-
     public static void uniformDist(int n, double maxX, double maxY){
 
         double [] xPoints = new double [n];
@@ -90,7 +24,7 @@ public class SyntheticGeneration {
         }
 
         // Write to file
-        writeToFile("uniform_distribution_number.txt", xPoints, yPoints);
+        //writeToFile("uniform_distribution_number.txt", xPoints, yPoints);
 
         // Generate Chart
         makeChart(xPoints, yPoints);
@@ -103,16 +37,19 @@ public class SyntheticGeneration {
     }
 
     public static void makeChart(double [] xPoints, double [] yPoints){
-        XYChart chart = new XYChartBuilder().title("Boston Strangler - Outlier Removed & Center of Mass").xAxisTitle("Longitude").yAxisTitle("Latitude").build();
+        XYChart chart = new XYChartBuilder().title("Markov Chain Original Points").xAxisTitle("X").yAxisTitle("Y").width(50).height(50).build();
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
         chart.getStyler().setMarkerSize(10);
         chart.getStyler().setChartTitleVisible(true);
 
 
         chart.addSeries("Data", xPoints, yPoints);
-        double [] c_of_m_x = {-71.07449180833332};
-        double [] c_of_m_y = {42.40020720833334};
-        chart.addSeries("C of M", c_of_m_x , c_of_m_y  );
+        //double [] c_of_m_x = {-71.07449180833332};
+        //double [] c_of_m_y = {42.40020720833334};
+        double [] x_1 = {15,35};
+        double [] y_1 = {30,16};
+        chart.addSeries("Points", x_1 , y_1  );
+
         new SwingWrapper<>(chart).displayChart();
     }
 
@@ -140,6 +77,4 @@ public class SyntheticGeneration {
         }
 
     }
-
-
 }

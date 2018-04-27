@@ -1,8 +1,24 @@
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class ProjectApp {
+
+    public static final String uniform_name_1 = "uniform_1.txt";
+    public static final String uniform_name_2 = "uniform_2.txt";
+    public static final String uniform_name_3 = "uniform_3.txt";
+
+    public static final int numPoints_1 = 50;
+    public static final int numPoints_2 = 50;
+    public static final int numPoints_3 = 50;
+
     public static void main(String [] args){
 
         /*
@@ -13,6 +29,29 @@ public class ProjectApp {
         *
         *
         * */
+
+
+
+
+        // 11 graphs
+
+        // Boston Strangler
+
+
+        // Data Generation
+        uniformDist(uniform_name_1, numPoints_1, 0, 10, 0, 10);
+        uniformDist(uniform_name_2, numPoints_2, 0, 50, 0, 50);
+        uniformDist(uniform_name_3, numPoints_3, 100, 200, 100, 200);
+
+        // Normal
+        // Combined
+
+        // Data Loading and Initial Graphing
+
+        loadFromFile(uniform_name_1, numPoints_1);
+        loadFromFile(uniform_name_2, numPoints_2);
+        loadFromFile(uniform_name_3, numPoints_3);
+
 
 
     }
@@ -66,7 +105,7 @@ public class ProjectApp {
         return rand;
     }
 
-    /* Helper function: writeToFile
+    /* writeToFile
     * args: a file name, array of x coordinate, array of y coordinates
     * output: produces file with data set made up of x and y coordinates
     * */
@@ -96,11 +135,104 @@ public class ProjectApp {
 
     }
 
-    /* Loading and Graphing Functions */
 
 
+    /* LOADING FUNCTIONS */
+
+
+    /* loadFromFile
+     * args: a file name, number of points in the file
+     * output: returns array containing array of x coordinates and array of y coordinates
+     * */
+    public static Object [] loadFromFile(String filename, int numPoints){
+        File file = new File (filename);
+        FileInputStream fis;
+        Scanner scan;
+
+        double [] xPoints = new double [numPoints];
+        double [] yPoints = new double [numPoints];
+
+        try{
+            fis = new FileInputStream(file);
+            scan = new Scanner(fis);
+
+            for(int i = 0; i < numPoints; i++){
+                xPoints[i] = scan.nextDouble();
+                yPoints[i] = scan.nextDouble();
+            }
+
+            scan.close();
+            fis.close();
+
+            // return arrays of x and y values
+            Object [] objs = {xPoints, yPoints};
+            return objs;
+
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /* CHART AND GRAPHING FUNCTIONS */
+
+    /* makeChart
+     * args: Chart title, x axis title, y axis title
+     * output: returns chart object with Scatter style
+     * */
+    public static XYChart makeChart(String title, String xAxisTitle, String yAxisTitle, int width, int height) {
+        XYChart chart = new XYChartBuilder().title(title).xAxisTitle(xAxisTitle).yAxisTitle(yAxisTitle).width(width).height(height).build();
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
+        chart.getStyler().setMarkerSize(10);
+        chart.getStyler().setChartTitleVisible(true);
+
+        return chart;
+    }
+
+    /* displayChart
+     * args: chart
+     * output: displays chart in own window
+     * */
+    public static void displayChart(XYChart chart){
+        new SwingWrapper<>(chart).displayChart();
+    }
+
+    /* addSeries
+     * args: chart, name of series, array of x coordinates, array of y coordinates
+     * output: displays chart in own window
+     * */
+    public static void addSeries(XYChart chart, String seriesName, double [] xPoints, double [] yPoints ){
+        chart.addSeries(seriesName, xPoints, yPoints );
+    }
 
     /* Model Application Functions */
+
+
+    /* modelOne (Farthest Points)
+     * args:
+     * output:
+     * */
+    public static void modelOne(){
+
+    }
+
+    /* modelTwo (Center of Mass)
+     * args:
+     * output:
+     * */
+    public static void modelTwo(){
+
+    }
+
+    /* modelThree (Markov Chain)
+     * args:
+     * output:
+     * */
+    public static void modelThree(){
+
+    }
 
 
 }

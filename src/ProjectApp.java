@@ -11,6 +11,9 @@ import java.util.Scanner;
 
 public class ProjectApp {
 
+    /* File Names*/
+    public static final String BOSTON_STRANGLER_NAME = "boston_strangler_data.txt";
+    public static final String BOSTON_STRANGLER_NAME_NO_OUTLIER = "boston_strangler_data_no_outlier.txt";
     public static final String UNIFORM_NAME_1 = "uniform_1.txt";
     public static final String UNIFORM_NAME_2 = "uniform_2.txt";
     public static final String UNIFORM_NAME_3 = "uniform_3.txt";
@@ -19,7 +22,7 @@ public class ProjectApp {
     public static final String NORMAL_NAME_3 = "normal_3.txt";
 
 
-    public static final int NUM_POINTS_1 = 25; // used in data generation
+    public static final int NUM_POINTS_1 = 50; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
@@ -27,6 +30,8 @@ public class ProjectApp {
     public static final String UNIFORM_GRAPH_NAME_1 = "Uniform Graph 1";
     public static final String UNIFORM_GRAPH_NAME_2 = "Uniform Graph 2";
     public static final String UNIFORM_GRAPH_NAME_3 = "Uniform Graph 3";
+    public static final String BOSTON_GRAPH_NAME_1 = "Boston Strangler Graph - All Data";
+    public static final String BOSTON_GRAPH_NAME_2 = "Boston Strangler Graph - Outlier Removed";
 
     public static final String NORMAL_GRAPH_NAME_1 = "Normal Graph 1";
     public static final String NORMAL_GRAPH_NAME_2 = "Normal Graph 2";
@@ -61,57 +66,130 @@ public class ProjectApp {
         // Boston Strangler
 
 
-        /*
+
         // Data Generation
-        uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 10, 0, 10);
+        //uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 10, 0, 10);
         //uniformDist(UNIFORM_NAME_2, NUM_POINTS_2, 0, 50, 0, 50);
         //uniformDist(UNIFORM_NAME_3, NUM_POINTS_3, 100, 200, 100, 200);
 
-        normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
+        //normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
 
         // Combined
 
         // Data Loading and Initial Graphing
 
-        Object [] result1 = loadFromFile(UNIFORM_NAME_1);
+        //Object [] result1 = loadFromFile(UNIFORM_NAME_1);
         //Object [] result2 = loadFromFile(UNIFORM_NAME_2);
         //Object [] result3 = loadFromFile(UNIFORM_NAME_3);
 
-        XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        //XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
         //XYChart uniformChart2 = makeChart(UNIFORM_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
         //XYChart uniformChart3 = makeChart(UNIFORM_GRAPH_NAME_3, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
 
-        addSeries(uniformChart1, "UniformTest", result1);
+        //addSeries(uniformChart1, "UniformTest", result1);
 
-        XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
-        Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
-        addSeries(normalChart1,"Normal Test", resultN1 );
-
-
-
-        displayChart(normalChart1);
+        //XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        //Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
+        //addSeries(normalChart1,"Normal Test", resultN1 );
 
 
-        Object [] c_of_m = modelTwo(resultN1);
+
+        //displayChart(normalChart1);
+
+
+        //Object [] c_of_m = modelTwo(resultN1);
         //double [] xPoints = c_of_m[0];
         //double [] yPoints = c_of_m[1];
 
-        addSeries(normalChart1, "c of m", c_of_m );
+        //addSeries(normalChart1, "c of m", c_of_m );
 
-        displayChart(normalChart1);
+        //displayChart(normalChart1);
 
         //displayChart(uniformChart1);
-        */
 
+
+        // Boston Strangler -- All Data
+        XYChart bostonStranglerChart1 = makeChart(BOSTON_GRAPH_NAME_1, X_AXIS_TITLE_X_LONGITUDE, Y_AXIS_TITLE_Y_LATITUDE, 100, 100);
+        Object [] resultBS1 = loadFromFile(BOSTON_STRANGLER_NAME);
+        addSeries(bostonStranglerChart1, "Data", resultBS1);
+        // Model 1 - Circle
+        double [] xPointsBS1 = (double []) resultBS1[0];
+        double [] yPointsBS1 = (double []) resultBS1[1];
+        Object [] resultModelOneBS1 = modelOne(xPointsBS1, yPointsBS1);
+        addSeries(bostonStranglerChart1,"Farthest Points", resultModelOneBS1);
+        // Model 2 - Center of Mass
+        Object [] resultModelTwoBS1 = modelTwo(xPointsBS1,yPointsBS1);
+        addSeries(bostonStranglerChart1,"Center of Mass", resultModelTwoBS1);
+        // Model 3 - Markov
+        // Display Graph
+        displayChart(bostonStranglerChart1);
+
+
+        // Boston Strangler -- Outlier Removed
+        XYChart bostonStranglerChart2 = makeChart(BOSTON_GRAPH_NAME_2, X_AXIS_TITLE_X_LONGITUDE, Y_AXIS_TITLE_Y_LATITUDE, 100, 100);
+        Object [] resultBS2 = loadFromFile(BOSTON_STRANGLER_NAME_NO_OUTLIER);
+        addSeries(bostonStranglerChart2, "Data", resultBS2);
+        // Model 1 - Circle
+        double [] xPointsBS2 = (double []) resultBS2[0];
+        double [] yPointsBS2 = (double []) resultBS2[1];
+        Object [] resultModelOneBS2 = modelOne(xPointsBS2, yPointsBS2);
+        addSeries(bostonStranglerChart2,"Farthest Points", resultModelOneBS2);
+        // Model 2 - Center of Mass
+        Object [] resultModelTwoBS2 = modelTwo(xPointsBS2,yPointsBS2);
+        addSeries(bostonStranglerChart2,"Center of Mass", resultModelTwoBS2);
+        // Model 3 - Markov
+        // Display Graph
+        displayChart(bostonStranglerChart2);
+
+        // Uniform
+        uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        Object [] resultU1 = loadFromFile(UNIFORM_NAME_1);
+        addSeries(uniformChart1, "Data", resultU1);
+        // Model 1 - Circle
+        double [] xPointsU1 = (double []) resultU1[0];
+        double [] yPointsU1 = (double []) resultU1[1];
+        Object [] resultModelOneU1 = modelOne(xPointsU1, yPointsU1);
+        addSeries(uniformChart1,"Farthest Points", resultModelOneU1);
+        // Model 2 - Center of Mass
+        Object [] resultModelTwoU1 = modelTwo(xPointsU1,yPointsU1);
+        addSeries(uniformChart1,"Center of Mass", resultModelTwoU1);
+        // Model 3 - Markov
+        // Display Graph
+        //displayChart(uniformChart1);
+
+
+        // Normal
+        normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
+        addSeries(normalChart1,"Data", resultN1 );
+        // Model 1 - Circle
+        double [] xPointsN1 = (double []) resultN1[0];
+        double [] yPointsN1 = (double []) resultN1[1];
+        Object [] resultModelOneN1 = modelOne(xPointsN1, yPointsN1);
+        addSeries(normalChart1, "Farthest Points", resultModelOneN1);
+        // Model 2 - Center of Mass
+        Object [] resultModelTwoN1 = modelTwo(xPointsN1,yPointsN1);
+        addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
+        // Model 3 - Markov
+        // Display Graph
+        //displayChart(normalChart1);
+
+        /*
         // (0,0) (0,1) (1,0) (5,5)
         double [] xPoints = {0,0,1,5};
         double [] yPoints = {0,1,0,5};
         Object [] resultModelOne = modelOne(xPoints, yPoints);
 
+        Object [] xyz = generateCircle(resultModelOne);
+
         XYChart testChart = makeChart("Test Chart", X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
         addSeries(testChart, "Points", xPoints, yPoints);
         addSeries(testChart, "Farthest Points", resultModelOne );
+        addSeries(testChart, "Circle", xyz);
         displayChart(testChart);
+        */
 
     }
 
@@ -458,18 +536,24 @@ public class ProjectApp {
         double centerY = Math.abs(y2 - y1) / 2.0;
 
         // circle = radius^2 = x^2 + y^2
+        // y = sqrt( radius^2 - x^2 )
 
-
-        double [] xCirclePoints = new double [100];
-        double [] yCirclePoints = new double [100];
-        int counter;
-        for(int i = 0; i < 100; i ++){
-
+        double [] xCirclePoints = new double [10];
+        double [] yCirclePoints = new double [10];
+        int counter = 0;
+        for(int i = 0; i < 10; i++){
+            xCirclePoints[counter] = counter;
+            xCirclePoints[counter+1] = counter;
+            yCirclePoints[counter] = Math.sqrt(Math.pow(radius,2) + Math.pow(counter,2));
+            yCirclePoints[counter+1] = -1 * Math.sqrt(Math.pow(radius,2) + Math.pow(counter,2));
+            counter += 2;
         }
 
-        Object [] result = null;
+        Object [] result = {xCirclePoints, yCirclePoints};
         return result;
     }
+
+
 
 
     /* Model Application Functions */
@@ -490,7 +574,7 @@ public class ProjectApp {
         double x1; double y1; double x2; double y2;
         int idx1 = 0; int idx2 = 0;
         for(int i = 0; i < numPoints; i++){
-            for(int j = i+1; j < numPoints; j++){
+            for(int j = 0; j < numPoints; j++){
                 x1 = xPoints[i]; x2 = xPoints[j];
                 y1 = yPoints[i]; y2 = yPoints[j];
                 distance = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
@@ -530,7 +614,7 @@ public class ProjectApp {
 
         double [] x = {xAvg};
         double [] y = {yAvg};
-        Object [] c_of_m = {xAvg, yAvg};
+        Object [] c_of_m = {x, y};
         return  c_of_m;
     }
 

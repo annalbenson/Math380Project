@@ -19,7 +19,7 @@ public class ProjectApp {
     public static final String NORMAL_NAME_3 = "normal_3.txt";
 
 
-    public static final int NUM_POINTS_1 = 500; // used in data generation
+    public static final int NUM_POINTS_1 = 25; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
@@ -61,6 +61,7 @@ public class ProjectApp {
         // Boston Strangler
 
 
+        /*
         // Data Generation
         uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 10, 0, 10);
         //uniformDist(UNIFORM_NAME_2, NUM_POINTS_2, 0, 50, 0, 50);
@@ -89,7 +90,28 @@ public class ProjectApp {
 
 
         displayChart(normalChart1);
+
+
+        Object [] c_of_m = modelTwo(resultN1);
+        //double [] xPoints = c_of_m[0];
+        //double [] yPoints = c_of_m[1];
+
+        addSeries(normalChart1, "c of m", c_of_m );
+
+        displayChart(normalChart1);
+
         //displayChart(uniformChart1);
+        */
+
+        // (0,0) (0,1) (1,0) (5,5)
+        double [] xPoints = {0,0,1,5};
+        double [] yPoints = {0,1,0,5};
+        Object [] resultModelOne = modelOne(xPoints, yPoints);
+
+        XYChart testChart = makeChart("Test Chart", X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        addSeries(testChart, "Points", xPoints, yPoints);
+        addSeries(testChart, "Farthest Points", resultModelOne );
+        displayChart(testChart);
 
     }
 
@@ -408,10 +430,45 @@ public class ProjectApp {
      * args: chart, name of series, array of array of x coordinates and array of y coordinates
      * output: adds series to chart object reference
      * */
-    public static void addSeries(XYChart chart, String seriesName, Object [] arrays ){
-        double [] xPoints = (double []) arrays[0];
-        double [] yPoints = (double []) arrays[1];
+    public static void addSeries(XYChart chart, String seriesName, Object [] points ){
+        double [] xPoints = (double []) points[0];
+        double [] yPoints = (double []) points[1];
         chart.addSeries(seriesName, xPoints, yPoints );
+    }
+
+    /* generateCircle
+     * args: array of array of x coordinates and array of y coordinates
+     *
+     *
+     * */
+    public static Object [] generateCircle(Object [] points){
+        // calculate center point and radius by extension
+        // generate points to be that circle
+        // return points
+
+        double [] xPoints = (double []) points[0];
+        double [] yPoints = (double []) points[1];
+
+        double x1 = xPoints[0]; double y1 = yPoints[0];
+        double x2 = xPoints[1]; double y2 = yPoints[1];
+
+        double diameter = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
+        double radius = diameter / 2.0;
+        double centerX = Math.abs(x2 - x1) / 2.0;
+        double centerY = Math.abs(y2 - y1) / 2.0;
+
+        // circle = radius^2 = x^2 + y^2
+
+
+        double [] xCirclePoints = new double [100];
+        double [] yCirclePoints = new double [100];
+        int counter;
+        for(int i = 0; i < 100; i ++){
+
+        }
+
+        Object [] result = null;
+        return result;
     }
 
 
@@ -419,19 +476,72 @@ public class ProjectApp {
 
 
     /* modelOne (Farthest Points)
-     * args:
-     * output:
+     * args: array of x coordinates, array of y coordinates
+     * output: two farthest points
      * */
-    public static void modelOne(){
+    public static Object [] modelOne( double [] xPoints, double [] yPoints  ){
+
+        // find most extreme points --> convex hull problem
+
+        int numPoints = xPoints.length;
+
+        double maxDistance = 0; // want to maximize distance
+        double distance;
+        double x1; double y1; double x2; double y2;
+        int idx1 = 0; int idx2 = 0;
+        for(int i = 0; i < numPoints; i++){
+            for(int j = i+1; j < numPoints; j++){
+                x1 = xPoints[i]; x2 = xPoints[j];
+                y1 = yPoints[i]; y2 = yPoints[j];
+                distance = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
+                if( distance > maxDistance ){
+                    maxDistance = distance;
+                    idx1 = i; idx2 = j;
+                }
+            }
+        }
+
+        x1 = xPoints[idx1]; y1 = yPoints[idx1];
+        x2 = xPoints[idx2]; y2 = yPoints[idx2];
+        System.out.println("Farthest Points: " + "(" + x1 + "," + y1 + ")" + " and " + "(" + x2 + "," + y2 + ")" );
+
+        double [] xResult = {x1, x2};
+        double [] yResult = {y1, y2};
+        Object [] result = {xResult, yResult};
+        return result;
 
     }
+
 
     /* modelTwo (Center of Mass)
      * args: array of x coordinates, array of y coordinates
      * output: center of mass ordered pair
      * */
-    public static double [] modelTwo(double [] xPoints, double [] yPoints){
+    public static Object [] modelTwo(double [] xPoints, double [] yPoints){
 
+        int numPoints = xPoints.length;
+        double xAvg = 0; double yAvg = 0;
+        for(int i = 0; i < numPoints; i ++ ){
+            xAvg += xPoints[i];
+            yAvg += yPoints[i];
+        }
+        xAvg /= numPoints;
+        yAvg /= numPoints;
+
+        double [] x = {xAvg};
+        double [] y = {yAvg};
+        Object [] c_of_m = {xAvg, yAvg};
+        return  c_of_m;
+    }
+
+    /* modelTwo (Center of Mass)
+     * args: array of arrays
+     * output: center of mass ordered pair
+     * */
+    public static double [] modelTwo(Object [] points){
+
+        double [] xPoints = (double []) points[0];
+        double [] yPoints = (double []) points[1];
         int numPoints = xPoints.length;
         double xAvg = 0; double yAvg = 0;
         for(int i = 0; i < numPoints; i ++ ){
@@ -445,11 +555,18 @@ public class ProjectApp {
         return  c_of_m;
     }
 
+
     /* modelThree (Markov Chain)
      * args:
      * output:
      * */
     public static void modelThree(){
+
+        // plot current point, predict, plot next, check
+        // or plot 10 buildings and start somewhere
+
+
+
 
     }
 

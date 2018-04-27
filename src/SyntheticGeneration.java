@@ -28,17 +28,18 @@ public class SyntheticGeneration {
 
         //bostonData();
 
-        //uniformDist(50,50,50);
+        uniformDist(50,50,50);
 
         // normal
 
         //concentricSquares();
-        int [] levelsPerCenter = {5,5};
+        /*
+        int [] levelsPerCenter = {5,3};
         double [] xCenters = {0,5};
         double [] yCenters = {5,5};
         XYChart chart = squares("Graph Title", 2, levelsPerCenter, xCenters, yCenters );
         new SwingWrapper<>( chart ).displayChart();
-
+        */
 
     }
 
@@ -219,7 +220,7 @@ public class SyntheticGeneration {
     }
 
     public static void makeChart(double [] xPoints, double [] yPoints){
-        XYChart chart = new XYChartBuilder().title("Concentric Squares").xAxisTitle("X").yAxisTitle("Y").build();
+        XYChart chart = new XYChartBuilder().title("TEST").xAxisTitle("X").yAxisTitle("Y").build();
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
         chart.getStyler().setMarkerSize(10);
         chart.getStyler().setChartTitleVisible(true);
@@ -230,9 +231,9 @@ public class SyntheticGeneration {
         //double [] c_of_m_y = {42.40020720833334};
         //chart.addSeries("C of M", c_of_m_x , c_of_m_y  );
 
-        double [] xCenter = {5};
-        double [] yCenter = {5};
-        chart.addSeries("Center Point", xCenter, yCenter  );
+        //double [] xCenter = {5};
+        //double [] yCenter = {5};
+        //chart.addSeries("Center Point", xCenter, yCenter  );
 
         new SwingWrapper<>(chart).displayChart();
     }

@@ -11,13 +11,29 @@ import java.util.Scanner;
 
 public class ProjectApp {
 
-    public static final String uniform_name_1 = "uniform_1.txt";
-    public static final String uniform_name_2 = "uniform_2.txt";
-    public static final String uniform_name_3 = "uniform_3.txt";
+    public static final String UNIFORM_NAME_1 = "uniform_1.txt";
+    public static final String UNIFORM_NAME_2 = "uniform_2.txt";
+    public static final String UNIFORM_NAME_3 = "uniform_3.txt";
 
-    public static final int numPoints_1 = 50;
-    public static final int numPoints_2 = 50;
-    public static final int numPoints_3 = 50;
+
+    public static final int NUM_POINTS_1 = 50; // used in data generation
+    public static final int NUM_POINTS_2 = 50;
+    public static final int NUM_POINTS_3 = 50;
+
+    /* Graph Titles */
+    public static final String UNIFORM_GRAPH_NAME_1 = "Uniform Graph 1";
+    public static final String UNIFORM_GRAPH_NAME_2 = "Uniform Graph 2";
+    public static final String UNIFORM_GRAPH_NAME_3 = "Uniform Graph 3";
+
+    /* Graph Axes Titles */
+    public static final String X_AXIS_TITLE_X = "X";
+    public static final String Y_AXIS_TITLE_Y = "Y";
+    public static final String X_AXIS_TITLE_X_LONGITUDE = "Longitude";
+    public static final String Y_AXIS_TITLE_Y_LATITUDE = "Latitude";
+
+
+
+
 
     public static void main(String [] args){
 
@@ -39,19 +55,24 @@ public class ProjectApp {
 
 
         // Data Generation
-        uniformDist(uniform_name_1, numPoints_1, 0, 10, 0, 10);
-        uniformDist(uniform_name_2, numPoints_2, 0, 50, 0, 50);
-        uniformDist(uniform_name_3, numPoints_3, 100, 200, 100, 200);
+        uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 10, 0, 10);
+        uniformDist(UNIFORM_NAME_2, NUM_POINTS_2, 0, 50, 0, 50);
+        uniformDist(UNIFORM_NAME_3, NUM_POINTS_3, 100, 200, 100, 200);
 
         // Normal
         // Combined
 
         // Data Loading and Initial Graphing
 
-        loadFromFile(uniform_name_1, numPoints_1);
-        loadFromFile(uniform_name_2, numPoints_2);
-        loadFromFile(uniform_name_3, numPoints_3);
+        Object [] result1 = loadFromFile(UNIFORM_NAME_1);
+        Object [] result2 = loadFromFile(UNIFORM_NAME_2);
+        Object [] result3 = loadFromFile(UNIFORM_NAME_3);
 
+        XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        XYChart uniformChart2 = makeChart(UNIFORM_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        XYChart uniformChart3 = makeChart(UNIFORM_GRAPH_NAME_3, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+
+        uniformChart1.addSeries(result1);
 
 
     }
@@ -90,12 +111,14 @@ public class ProjectApp {
      * */
     public static void normalDist(String filename, int n, double minX, double maxX, double minY, double maxY){
 
+
+
     }
 
 
 
 
-    /* Helper function: randomWithRange
+    /* randomWithRange
      * args: minimum range value, maximum range value
      * output: returns random number x in range min <= x <= max
      * */
@@ -104,6 +127,9 @@ public class ProjectApp {
         double rand = Math.random() * range + min;
         return rand;
     }
+
+
+    /* FILE FUNCTIONS */
 
     /* writeToFile
     * args: a file name, array of x coordinate, array of y coordinates
@@ -121,6 +147,8 @@ public class ProjectApp {
             fos = new FileOutputStream(file);
             pw = new PrintWriter(fos);
 
+            pw.println(numPoints); // so future file readers know how many lines to expect
+
             for(int i = 0; i < numPoints; i++ ){
                 pw.println(xPoints[i] + "\t" + yPoints[i]);
             }
@@ -136,26 +164,37 @@ public class ProjectApp {
     }
 
 
-
-    /* LOADING FUNCTIONS */
-
-
     /* loadFromFile
-     * args: a file name, number of points in the file
-     * output: returns array containing array of x coordinates and array of y coordinates
+     * args: a file name
+     * output: returns array containing the x coordinate array and the y coordinate array
      * */
-    public static Object [] loadFromFile(String filename, int numPoints){
+    public static Object [] loadFromFile(String filename){
         File file = new File (filename);
         FileInputStream fis;
         Scanner scan;
 
-        double [] xPoints = new double [numPoints];
-        double [] yPoints = new double [numPoints];
+        double [] xPoints; // will hold loaded points
+        double [] yPoints;
+        int numPoints; // first line of file contains an int so we can create appropriately sized arrays
 
         try{
             fis = new FileInputStream(file);
             scan = new Scanner(fis);
 
+            if(scan.hasNext()){
+                // non empty file
+                numPoints = scan.nextInt();
+            }
+            else{
+                System.out.println("No num points value, improper file, returning");
+                return null;
+            }
+
+            // create arrays
+            xPoints = new double [numPoints];
+            yPoints = new double [numPoints];
+
+            // load arrays
             for(int i = 0; i < numPoints; i++){
                 xPoints[i] = scan.nextDouble();
                 yPoints[i] = scan.nextDouble();
@@ -164,7 +203,7 @@ public class ProjectApp {
             scan.close();
             fis.close();
 
-            // return arrays of x and y values
+            // return arrays
             Object [] objs = {xPoints, yPoints};
             return objs;
 
@@ -199,13 +238,24 @@ public class ProjectApp {
         new SwingWrapper<>(chart).displayChart();
     }
 
-    /* addSeries
+    /* addSeries ( separate arrays )
      * args: chart, name of series, array of x coordinates, array of y coordinates
-     * output: displays chart in own window
+     * output: adds series to chart object reference
      * */
     public static void addSeries(XYChart chart, String seriesName, double [] xPoints, double [] yPoints ){
         chart.addSeries(seriesName, xPoints, yPoints );
     }
+
+    /* addSeries ( Object array )
+     * args: chart, name of series, array of array of x coordinates and array of y coordinates
+     * output: adds series to chart object reference
+     * */
+    public static void addSeries(XYChart chart, String seriesName, Object [] arrays ){
+        double [] xPoints = (double []) arrays[0];
+        double [] yPoints = (double []) arrays[0];
+        chart.addSeries(seriesName, xPoints, yPoints );
+    }
+
 
     /* Model Application Functions */
 
@@ -219,11 +269,22 @@ public class ProjectApp {
     }
 
     /* modelTwo (Center of Mass)
-     * args:
-     * output:
+     * args: array of x coordinates, array of y coordinates
+     * output: center of mass ordered pair
      * */
-    public static void modelTwo(){
+    public static double [] modelTwo(double [] xPoints, double [] yPoints){
 
+        int numPoints = xPoints.length;
+        double xAvg = 0; double yAvg = 0;
+        for(int i = 0; i < numPoints; i ++ ){
+            xAvg += xPoints[i];
+            yAvg += yPoints[i];
+        }
+        xAvg /= numPoints;
+        yAvg /= numPoints;
+
+        double [] c_of_m = {xAvg, yAvg};
+        return  c_of_m;
     }
 
     /* modelThree (Markov Chain)

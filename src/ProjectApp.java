@@ -125,6 +125,7 @@ public class ProjectApp {
         displayChart(bostonStranglerChart1);
 
 
+        /*
         // Boston Strangler -- Outlier Removed
         XYChart bostonStranglerChart2 = makeChart(BOSTON_GRAPH_NAME_2, X_AXIS_TITLE_X_LONGITUDE, Y_AXIS_TITLE_Y_LATITUDE, 100, 100);
         Object [] resultBS2 = loadFromFile(BOSTON_STRANGLER_NAME_NO_OUTLIER);
@@ -140,7 +141,8 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         displayChart(bostonStranglerChart2);
-
+*/
+        /*
         // Uniform
         uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
@@ -157,8 +159,9 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         //displayChart(uniformChart1);
+*/
 
-
+        /*
         // Normal
         normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
@@ -175,7 +178,7 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         //displayChart(normalChart1);
-
+           */
         /*
         // (0,0) (0,1) (1,0) (5,5)
         double [] xPoints = {0,0,1,5};
@@ -459,7 +462,7 @@ public class ProjectApp {
             scan.close();
             fis.close();
 
-            System.out.println("first point loaded: (x,y) = "  + xPoints[0] + "," + yPoints[0]);
+            //System.out.println("first point loaded: (x,y) = "  + xPoints[0] + "," + yPoints[0]);
 
             // return arrays
             Object [] objs = {xPoints, yPoints};
@@ -570,21 +573,29 @@ public class ProjectApp {
         int numPoints = xPoints.length;
 
         double maxDistance = 0; // want to maximize distance
-        double distance;
+        double distance = 0;
         double x1; double y1; double x2; double y2;
-        int idx1 = 0; int idx2 = 0;
+        int idx1 = -1; int idx2 = -1;
         for(int i = 0; i < numPoints; i++){
-            for(int j = 0; j < numPoints; j++){
-                x1 = xPoints[i]; x2 = xPoints[j];
-                y1 = yPoints[i]; y2 = yPoints[j];
-                distance = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
-                if( distance > maxDistance ){
-                    maxDistance = distance;
-                    idx1 = i; idx2 = j;
+            for(int j = i; j < numPoints; j++){
+                if( i != j ){
+                    x1 = xPoints[i]; x2 = xPoints[j];
+                    y1 = yPoints[i]; y2 = yPoints[j];
+                    distance = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
+                    System.out.println("Distance =" + distance);
+                    if( distance >= maxDistance ){
+                        maxDistance = distance;
+                        //idx1 = i; idx2 = 11  ;
+                        idx1 = i; idx2 = j;
+
+
+                    }
                 }
             }
         }
 
+        System.out.println("idx1 = " + idx1);
+        System.out.println("idx2 = " + idx2);
         x1 = xPoints[idx1]; y1 = yPoints[idx1];
         x2 = xPoints[idx2]; y2 = yPoints[idx2];
         System.out.println("Farthest Points: " + "(" + x1 + "," + y1 + ")" + " and " + "(" + x2 + "," + y2 + ")" );
@@ -646,12 +657,37 @@ public class ProjectApp {
      * */
     public static void modelThree(){
 
-        // plot current point, predict, plot next, check
-        // or plot 10 buildings and start somewhere
+        // plot first point, two squares around it
 
 
 
+    }
 
+    public static Object [] concentricSquares(   ){
+        // used to produce arrays of f(x) = something
+        int numPoints = 5;
+        int numLevels = 5;
+
+
+        double [] xPoints; double [] yPoints;
+
+        //double [] xCenter = {0}; double [] yCenter = {5};
+        //double [] x_lvl1 = {};
+        //chart.addSeries("Center Point", xCenter, yCenter  );
+
+
+        for(int i = 0; i < numLevels; i++){
+            xPoints = new double [numPoints]; // need new objects
+            yPoints = new double [numPoints];
+            xPoints[0] = -1 * i; xPoints[1] = i; xPoints[2] = i; xPoints[3] = -1 * i; xPoints[4] = -1 * i;
+            System.out.println(xPoints[0] + " " + xPoints[1]);
+            yPoints[0] = i; yPoints[1] = i; yPoints[2] = -1 * i; yPoints[3] = -1 * i; yPoints[4] = i;
+            System.out.println(yPoints[0] + " " + yPoints[1]);
+            //chart.addSeries("Lvl" + i, xPoints, yPoints);
+        }
+
+        //new SwingWrapper<>(chart).displayChart();
+        return  null;
     }
 
 

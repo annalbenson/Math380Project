@@ -19,7 +19,7 @@ public class ProjectApp {
     public static final String NORMAL_NAME_3 = "normal_3.txt";
 
 
-    public static final int NUM_POINTS_1 = 100; // used in data generation
+    public static final int NUM_POINTS_1 = 500; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
@@ -121,140 +121,116 @@ public class ProjectApp {
     }
 
 
-    /* Generation function: normalDist
-     * args: a file name, number of data points to be generated, min and max x values, min and max y values
-     * output: produces n ordered pairs with a normal distribution with ranges:
-     *          minX <= produced x values <= maxX & minY <= produced y values <= maxY.
-     *          This data is then written to a file with name "filename"
-     * */
+
     public static void normalDist(String filename, int numPoints, double minX, double maxX, double minY, double maxY){
 
         double [] xPoints = new double [numPoints];
         double [] yPoints = new double [numPoints];
 
 
+        // assume total range is 100
+        // let buffer zone be 40 to 60
+        // let first level be 30 to 70
+        // let second level be 20 to 80
+        // let final level be 0 to 100
+
         int firstNumPoints = (int) Math.floor(0.68 * numPoints);
         System.out.println("first num points = " + firstNumPoints);
         double xGen; double yGen;
         for(int i = 0; i < firstNumPoints; i++){
-            xGen = randomWithRange(40, 60);
-            yGen = randomWithRange(40, 60);
-            //while(xGen )
-            xPoints[i]= xGen;
-            yPoints[i] = yGen;
+
+            xGen = randomWithRange(30,70);
+            xPoints[i] = xGen;
+            if( 30 < xGen && xGen < 40 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(30,70);
+                yPoints[i] = yGen;
+            }
+            if( 40 < xGen && xGen < 60 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(30,40,60,70);
+                yPoints[i] = yGen;
+            }
+            if( 60 < xGen && xGen < 70){
+                // in later range, y value can be anything
+                yGen = randomWithRange(30,70);
+                yPoints[i] = yGen;
+            }
+
+
+            //xPoints[i] = randomWithMultipleRanges(30, 40, 60, 70 );
+            //xPoints[i] = randomWithRange(30,70 );
+            //yPoints[i] = randomWithMultipleRanges(30, 40, 60, 70);
+            //yPoints[i] = randomWithRange(30, 70);
+
         }
 
         int secondNumPoints = (int) Math.floor(0.27 * numPoints);
         System.out.println("second num points = " + secondNumPoints);
-        //double xGen; double yGen;
         for(int i = firstNumPoints; i < (firstNumPoints + secondNumPoints); i++){
-            xGen = randomWithRange(30, 70);
-            yGen = randomWithRange(30, 70);
-            //while(xGen )
-            xPoints[i]= xGen;
-            yPoints[i] = yGen;
+
+
+            xGen = randomWithRange(20,80);
+            xPoints[i] = xGen;
+            if( 20 < xGen && xGen < 30 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(20,80);
+                yPoints[i] = yGen;
+            }
+            if( 30 < xGen && xGen < 70 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(20,30,70,80);
+                yPoints[i] = yGen;
+            }
+            if( 70 < xGen && xGen < 80){
+                // in later range, y value can be anything
+                yGen = randomWithRange(20,80);
+                yPoints[i] = yGen;
+            }
+
+
+
+            //xPoints[i] = randomWithMultipleRanges(20, 30, 70, 80 );
+            //xPoints[i] = randomWithRange(20,80);
+            //yPoints[i] = randomWithMultipleRanges(20, 30, 70, 80);
+            //yPoints[i] = randomWithRange(20, 80);
         }
+
 
         int finalNumPoints = numPoints - firstNumPoints - secondNumPoints;
         System.out.println("final num points = " + finalNumPoints);
         System.out.println("Left to generate = " + finalNumPoints);
 
         for(int i = (firstNumPoints + secondNumPoints); i < numPoints; i++){
-            xGen = randomWithRange(minX, maxX);
-            yGen = randomWithRange(minY, maxY);
-            //while(xGen )
-            xPoints[i]= xGen;
-            yPoints[i] = yGen;
-        }
 
-
-
-        /*
-        // Generate points
-
-        // buffer range --> (max - min) / 2 + 1
-        double bufferMinX = 40;
-        double bufferMinY = 40;
-        double bufferMaxX = 50;
-        double bufferMaxY = 50;
-
-        // first level --> (max - min) / 2 + 3;
-        double firstMinX = 20;
-        double firstMinY = 20;
-        double firstMaxX = 70;
-        double firstMaxY = 70;
-
-        // second level --> (max - min) / 2 + 5
-        double secondMinX = (maxX - minX) / 2.0 - 5;
-        double secondMinY = (maxY - minY) / 2.0 - 5;
-        double secondMaxX = (maxX - minX) / 2.0 + 5;
-        double secondMaxY = (maxY - minY) / 2.0 + 5;
-
-        // implied final level --> (max - min)
-
-        // produce data uniformly in each range, more in first level, less in second, less in whole
-
-        // how do buffer zone? (let's assume buffer zone is a point just at first)
-
-        // do inner square first
-        int firstNumPoints = (int) Math.floor(0.68 * numPoints);
-        for(int i = 0; i < firstNumPoints; i ++){
-            xPoints[i] = randomWithRange(firstMinX, firstMaxX);
-            yPoints[i] = randomWithRange(firstMinY, firstMaxY);
-        }
-
-        /*
-        // next level
-        int secondNumPoints = (int) Math.floor(0.27 * numPoints);
-        for(int i = 0; i < secondNumPoints; i ++){
-            xPoints[i] = randomWithRange(secondMinX, secondMaxX);
-            yPoints[i] = randomWithRange(secondMinY, secondMaxY);
-        }
-
-
-
-        // out most level
-        int finalNumPoints = numPoints - firstNumPoints;
-        for(int i = 0; i < finalNumPoints; i ++){
-            xPoints[i] = randomWithRange(minX, maxX);
-            yPoints[i] = randomWithRange(minY, maxY);
-        }
-
-
-
-        */
-
-
-        // range 1 is between buffer and firstMinX and firstMinY
-
-        //firstMin <= pt <= bufferMinX && bufferMaxX <= pt firstMaxX
-
-        // generate inside of larger square but if inside inner square do another point
-
-        /*
-        int firstNumPoints = (int) Math.floor(0.68 * numPoints);
-        for(int i = 0; i < firstNumPoints; i++){
-            if( i % 2 == 0) { // even iteration, do left side
-
-                //firstMinX <= pt <= bufferMinX
-                xPoints[i] = randomWithRange(firstMinX, bufferMinX);
-                yPoints[i] = randomWithRange(firstMinY - buggerMinY, firstMinY);
+            xGen = randomWithRange(minX,maxX);
+            xPoints[i] = xGen;
+            if( minX < xGen && xGen < 20 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(minY,maxY);
+                yPoints[i] = yGen;
             }
-            else{ // odd iteration, do right side
+            if( 20 < xGen && xGen < 80 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(20,30,70,80);
+                yPoints[i] = yGen;
+            }
+            if( 80 < xGen && xGen < maxX){
+                // in later range, y value can be anything
+                yGen = randomWithRange(minY,maxY);
+                yPoints[i] = yGen;
+            }
 
-                }
 
+
+
+            //xPoints[i] = randomWithMultipleRanges(minX, 20, 80, maxX );
+            //xPoints[i] = randomWithRange(minX,maxX );
+            //yPoints[i] = randomWithMultipleRanges(minY, 20, 80, maxY);
+            //yPoints[i] = randomWithRange(minY, maxY);
         }
 
-        // range 2
-        int secondNumPoints = (int) Math.floor(0.27 * numPoints); // 95 - 68  27
-        for(int i = 0; i < numPoints; i++){
-            xPoints[i] = randomWithRange( minX, maxX );
-            yPoints[i] = randomWithRange( minY, maxY );
-        }
 
-
-        */
 
         // Write to file
         writeToFile(filename, xPoints, yPoints);
@@ -284,6 +260,28 @@ public class ProjectApp {
         double range = (max - min);
         double rand = Math.random() * range + min;
         return rand;
+    }
+
+    /* randomWithMultipleRanges
+     * args: minimum range value, maximum range value
+     * output: picks a range and then returns a random number x in the selected range
+     * */
+    public static double randomWithMultipleRanges(double min1, double max1, double min2, double max2){
+
+        double whichRange = Math.random();
+        if(whichRange <= 0.5){
+            // use first interval
+            double range = (max1 - min1);
+            double rand = Math.random() * range + min1;
+            return rand;
+
+        }else{
+            // use second interval
+            double range = (max2 - min2);
+            double rand = Math.random() * range + min2;
+            return rand;
+        }
+
     }
 
 

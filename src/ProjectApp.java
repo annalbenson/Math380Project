@@ -23,7 +23,7 @@ public class ProjectApp {
     public static final String COMBINED_NAME_1 = "combined_1.txt";
 
 
-    public static final int NUM_POINTS_1 = 100; // used in data generation
+    public static final int NUM_POINTS_1 = 50; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
@@ -128,64 +128,67 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         displayChart(bostonStranglerChart2);
-*/
-        /*
+        */
+
         // Uniform
         uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
         Object [] resultU1 = loadFromFile(UNIFORM_NAME_1);
-        addSeries(uniformChart1, "Data", resultU1);
+        //addSeries(uniformChart1, "Data", resultU1);
         // Model 1 - Circle
         double [] xPointsU1 = (double []) resultU1[0];
         double [] yPointsU1 = (double []) resultU1[1];
         Object [] resultModelOneU1 = modelOne(xPointsU1, yPointsU1);
-        addSeries(uniformChart1,"Farthest Points", resultModelOneU1);
+        //addSeries(uniformChart1,"Farthest Points", resultModelOneU1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoU1 = modelTwo(xPointsU1,yPointsU1);
-        addSeries(uniformChart1,"Center of Mass", resultModelTwoU1);
+        //addSeries(uniformChart1,"Center of Mass", resultModelTwoU1);
         // Model 3 - Markov
+        modelThree(uniformChart1, resultU1);
         // Display Graph
-        //displayChart(uniformChart1);
-*/
+        displayChart(uniformChart1);
 
 
-/*
+
+
         // Normal
         normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
         Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
-        addSeries(normalChart1,"Data", resultN1 );
+        //addSeries(normalChart1,"Data", resultN1 );
         // Model 1 - Circle
         double [] xPointsN1 = (double []) resultN1[0];
         double [] yPointsN1 = (double []) resultN1[1];
         Object [] resultModelOneN1 = modelOne(xPointsN1, yPointsN1);
-        addSeries(normalChart1, "Farthest Points", resultModelOneN1);
+        //addSeries(normalChart1, "Farthest Points", resultModelOneN1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoN1 = modelTwo(xPointsN1,yPointsN1);
-        addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
+        //addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
         // Model 3 - Markov
+        modelThree(normalChart1, resultN1);
         // Display Graph
         displayChart(normalChart1);
-        */
 
-/*
+
+
         // Combined
-        combinedDist(COMBINED_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
+        //combinedDist(COMBINED_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart combinedChart1 = makeChart(COMBINED_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
         Object [] resultC1 = loadFromFile(COMBINED_NAME_1);
-        addSeries(combinedChart1,"Data", resultC1 );
+        //addSeries(combinedChart1,"Data", resultC1 );
         // Model 1 - Circle
         double [] xPointsC1 = (double []) resultC1[0];
         double [] yPointsC1 = (double []) resultC1[1];
         Object [] resultModelOneC1 = modelOne(xPointsC1, yPointsC1);
-        addSeries(combinedChart1, "Farthest Points", resultModelOneC1);
+        //addSeries(combinedChart1, "Farthest Points", resultModelOneC1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoC1 = modelTwo(xPointsC1,yPointsC1);
-        addSeries(combinedChart1,"Center of Mass", resultModelTwoC1);
+        //addSeries(combinedChart1,"Center of Mass", resultModelTwoC1);
         // Model 3 - Markov
+        modelThree(combinedChart1, resultC1);
         // Display Graph
         displayChart(combinedChart1);
-  */
+
 
 
         // Model Three
@@ -760,24 +763,30 @@ public class ProjectApp {
      * */
     public static void modelThree(XYChart chart, Object [] points){
 
-        // plot first point, two squares around it
+        // plot first point, buffer and two squares around it
 
         double [] xPoints = (double []) points[0];
         double [] yPoints = (double []) points[1];
         int numPoints = xPoints.length;
 
+        for(int i = 0; i < 4; i++) {
 
+            double[] x = {xPoints[i]};
+            double[] y = {yPoints[i]};
+            double centerX = xPoints[i];
+            double centerY = xPoints[i];
 
-
+            addSeries(chart, "Point #" + i, x, y);
+            concentricSquares(chart, 3, x[0], y[0], i);
+        }
 
 
     }
 
-    public static Object [] concentricSquares(   ){
-        // used to produce arrays of f(x) = something
-        int numPoints = 5;
-        int numLevels = 5;
+    public static void concentricSquares( XYChart chart, int numLevels, double centerX, double centerY, int pointNumber ){
 
+        int numPoints = 5;
+        //int numLevels = 5;
 
         double [] xPoints; double [] yPoints;
 
@@ -786,18 +795,30 @@ public class ProjectApp {
         //chart.addSeries("Center Point", xCenter, yCenter  );
 
 
-        for(int i = 0; i < numLevels; i++){
-            xPoints = new double [numPoints]; // need new objects
-            yPoints = new double [numPoints];
-            xPoints[0] = -1 * i; xPoints[1] = i; xPoints[2] = i; xPoints[3] = -1 * i; xPoints[4] = -1 * i;
-            System.out.println(xPoints[0] + " " + xPoints[1]);
-            yPoints[0] = i; yPoints[1] = i; yPoints[2] = -1 * i; yPoints[3] = -1 * i; yPoints[4] = i;
-            System.out.println(yPoints[0] + " " + yPoints[1]);
-            //chart.addSeries("Lvl" + i, xPoints, yPoints);
+        // centered at (centerX,centerY)
+        double levels = numLevels * 10; // Scale to 100 by 100 graph
+        double positiveX; double negativeX;
+        double positiveY; double negativeY;
+        for(int i = 10; i < levels; i+= 10){
+            positiveX = i + centerX; negativeX = (-1*i) + centerX;
+            positiveY = i + centerY; negativeY = (-1*i) + centerY;
+            xPoints = new double [numPoints]; yPoints = new double [numPoints];
+            xPoints[0] = negativeX; xPoints[1] = positiveX; xPoints[2] = positiveX; xPoints[3] = negativeX; xPoints[4] = negativeX;
+            //System.out.println(xPoints[0] + " " + xPoints[1]);
+            yPoints[0] = positiveY; yPoints[1] = positiveY; yPoints[2] = negativeY; yPoints[3] = negativeY; yPoints[4] = positiveY;
+            //System.out.println(yPoints[0] + " " + yPoints[1]);
+            if( i == 10){
+                XYSeries series = chart.addSeries("Buffer for Point" + pointNumber, xPoints, yPoints);
+                series.setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+
+            }
+            else{
+                XYSeries series = chart.addSeries("Expected Next Crime for Point #" + pointNumber, xPoints, yPoints);
+                series.setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+            }
+
         }
 
-        //new SwingWrapper<>(chart).displayChart();
-        return  null;
     }
 
 

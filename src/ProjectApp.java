@@ -21,6 +21,7 @@ public class ProjectApp {
     public static final String NORMAL_NAME_2 = "normal_2.txt";
     public static final String NORMAL_NAME_3 = "normal_3.txt";
     public static final String COMBINED_NAME_1 = "combined_1.txt";
+    public static final String COMBINED_NAME_2 = "combined_2.txt";
 
 
     public static final int NUM_POINTS_1 = 50; // used in data generation
@@ -37,6 +38,7 @@ public class ProjectApp {
     public static final String NORMAL_GRAPH_NAME_2 = "Normal Graph 2";
     public static final String NORMAL_GRAPH_NAME_3 = "Normal Graph 3";
     public static final String COMBINED_GRAPH_NAME_1 = "Combined Graph 1";
+    public static final String COMBINED_GRAPH_NAME_2 = "Combined Graph 2";
 
     /* Graph Axes Titles */
     public static final String X_AXIS_TITLE_X = "X";
@@ -46,53 +48,6 @@ public class ProjectApp {
 
 
     public static void main(String [] args){
-
-        /*
-        * Step 1) Generate Data (Uniform, Normal. Mixed)
-        *   Save to File
-        * Step 2) Load Data From File and Graph
-        * Step 3) Apply Model to Data and Graph
-        *
-        *
-        * */
-
-
-
-
-        // 11 graphs
-
-        // Boston Strangler
-
-
-
-        // Data Generation
-        //uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 10, 0, 10);
-        //uniformDist(UNIFORM_NAME_2, NUM_POINTS_2, 0, 50, 0, 50);
-        //uniformDist(UNIFORM_NAME_3, NUM_POINTS_3, 100, 200, 100, 200);
-
-        //normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
-
-        // Combined
-
-        // Data Loading and Initial Graphing
-
-        //Object [] result1 = loadFromFile(UNIFORM_NAME_1);
-        //Object [] result2 = loadFromFile(UNIFORM_NAME_2);
-        //Object [] result3 = loadFromFile(UNIFORM_NAME_3);
-
-        //XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
-        //XYChart uniformChart2 = makeChart(UNIFORM_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
-        //XYChart uniformChart3 = makeChart(UNIFORM_GRAPH_NAME_3, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
-
-        //addSeries(uniformChart1, "UniformTest", result1);
-
-        //XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
-        //Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
-        //addSeries(normalChart1,"Normal Test", resultN1 );
-
-
-
-
 
         /*
         // Boston Strangler -- All Data
@@ -108,6 +63,7 @@ public class ProjectApp {
         Object [] resultModelTwoBS1 = modelTwo(xPointsBS1,yPointsBS1);
         addSeries(bostonStranglerChart1,"Center of Mass", resultModelTwoBS1);
         // Model 3 - Markov
+        // No Model 3 for this data
         // Display Graph
         displayChart(bostonStranglerChart1);
         */
@@ -131,20 +87,24 @@ public class ProjectApp {
         */
 
         // Uniform
-        uniformDist(UNIFORM_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
-        XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
-        Object [] resultU1 = loadFromFile(UNIFORM_NAME_1);
-        //addSeries(uniformChart1, "Data", resultU1);
+        uniformDist(UNIFORM_NAME_2, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        Object [] resultU1 = loadFromFile(UNIFORM_NAME_2);
+        addSeries(uniformChart1, "Data", resultU1);
         // Model 1 - Circle
         double [] xPointsU1 = (double []) resultU1[0];
         double [] yPointsU1 = (double []) resultU1[1];
         Object [] resultModelOneU1 = modelOne(xPointsU1, yPointsU1);
-        //addSeries(uniformChart1,"Farthest Points", resultModelOneU1);
+        addSeries(uniformChart1,"Farthest Points", resultModelOneU1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoU1 = modelTwo(xPointsU1,yPointsU1);
-        //addSeries(uniformChart1,"Center of Mass", resultModelTwoU1);
+        addSeries(uniformChart1,"Center of Mass", resultModelTwoU1);
+
+        //uniformDist(UNIFORM_NAME_2, NUM_POINTS_1, 0, 100, 0, 100);
+        //XYChart uniformChart1 = makeChart(UNIFORM_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100 );
+        //Object [] resultU1 = loadFromFile(UNIFORM_NAME_1);
         // Model 3 - Markov
-        modelThree(uniformChart1, resultU1);
+        //modelThree(uniformChart1, resultU1);
         // Display Graph
         displayChart(uniformChart1);
 
@@ -152,51 +112,45 @@ public class ProjectApp {
 
 
         // Normal
-        normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
-        XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
-        Object [] resultN1 = loadFromFile(NORMAL_NAME_1);
-        //addSeries(normalChart1,"Data", resultN1 );
+        normalDist(NORMAL_NAME_2, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        Object [] resultN1 = loadFromFile(NORMAL_NAME_2);
+        addSeries(normalChart1,"Data", resultN1 );
         // Model 1 - Circle
         double [] xPointsN1 = (double []) resultN1[0];
         double [] yPointsN1 = (double []) resultN1[1];
         Object [] resultModelOneN1 = modelOne(xPointsN1, yPointsN1);
-        //addSeries(normalChart1, "Farthest Points", resultModelOneN1);
+        addSeries(normalChart1, "Farthest Points", resultModelOneN1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoN1 = modelTwo(xPointsN1,yPointsN1);
-        //addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
+        addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
         // Model 3 - Markov
-        modelThree(normalChart1, resultN1);
+        //modelThree(normalChart1, resultN1);
         // Display Graph
         displayChart(normalChart1);
 
 
 
         // Combined
-        //combinedDist(COMBINED_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
-        XYChart combinedChart1 = makeChart(COMBINED_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
-        Object [] resultC1 = loadFromFile(COMBINED_NAME_1);
-        //addSeries(combinedChart1,"Data", resultC1 );
+        combinedDist(COMBINED_NAME_2, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart combinedChart1 = makeChart(COMBINED_GRAPH_NAME_2, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        Object [] resultC1 = loadFromFile(COMBINED_NAME_2);
+        addSeries(combinedChart1,"Data", resultC1 );
+        System.out.println("getWidth after data added: " + combinedChart1.getWidth());
         // Model 1 - Circle
         double [] xPointsC1 = (double []) resultC1[0];
         double [] yPointsC1 = (double []) resultC1[1];
         Object [] resultModelOneC1 = modelOne(xPointsC1, yPointsC1);
-        //addSeries(combinedChart1, "Farthest Points", resultModelOneC1);
+        addSeries(combinedChart1, "Farthest Points", resultModelOneC1);
         // Model 2 - Center of Mass
         Object [] resultModelTwoC1 = modelTwo(xPointsC1,yPointsC1);
-        //addSeries(combinedChart1,"Center of Mass", resultModelTwoC1);
+        addSeries(combinedChart1,"Center of Mass", resultModelTwoC1);
         // Model 3 - Markov
-        modelThree(combinedChart1, resultC1);
+        //modelThree(combinedChart1, resultC1);
         // Display Graph
         displayChart(combinedChart1);
 
-
-
         // Model Three
-
-
-
-
-
 
     }
 
@@ -205,7 +159,7 @@ public class ProjectApp {
 
     /* Generation function: uniformDist
      * args: a file name, number of data points to be generated, min and max x values, min and max y values
-     * output: produces n ordered pairs with a uniform distribution with ranges:
+     * output: produces numPoints ordered pairs with a uniform distribution with ranges:
      *          minX <= produced x values <= maxX & minY <= produced y values <= maxY.
      *          This data is then written to a file with name "filename"
      * */
@@ -236,7 +190,7 @@ public class ProjectApp {
 
 
         // assume total range is 100
-        // let buffer zone be 40 to 60
+        // let buffer zone be 45 to 55
         // let first level be 30 to 70
         // let second level be 20 to 80
         // let final level be 0 to 100
@@ -248,17 +202,17 @@ public class ProjectApp {
 
             xGen = randomWithRange(30,70);
             xPoints[i] = xGen;
-            if( 30 < xGen && xGen < 40 ){
+            if( 30 < xGen && xGen < 45 ){
                 // in former range, y value can be anything
                 yGen = randomWithRange(30,70);
                 yPoints[i] = yGen;
             }
-            if( 40 < xGen && xGen < 60 ){
+            if( 45 < xGen && xGen < 55 ){
                 // needs y below or above buffer zone
-                yGen = randomWithMultipleRanges(30,40,60,70);
+                yGen = randomWithMultipleRanges(30,45,55,70);
                 yPoints[i] = yGen;
             }
-            if( 60 < xGen && xGen < 70){
+            if( 55 < xGen && xGen < 70){
                 // in later range, y value can be anything
                 yGen = randomWithRange(30,70);
                 yPoints[i] = yGen;
@@ -271,7 +225,6 @@ public class ProjectApp {
         int secondNumPoints = (int) Math.floor(0.27 * numPoints);
         System.out.println("second num points = " + secondNumPoints);
         for(int i = firstNumPoints; i < (firstNumPoints + secondNumPoints); i++){
-
 
             xGen = randomWithRange(20,80);
             xPoints[i] = xGen;
@@ -320,8 +273,6 @@ public class ProjectApp {
                 yPoints[i] = yGen;
             }
 
-
-
         }
 
 
@@ -348,7 +299,7 @@ public class ProjectApp {
 
 
         int numPointsNormal =  (int) Math.floor(numPoints / 2);
-        int numPointsUniform =  numPoints - numPointsNormal;
+        //int numPointsUniform =  numPoints - numPointsNormal;
 
 
         // Normal Generation:
@@ -360,23 +311,21 @@ public class ProjectApp {
 
             xGen = randomWithRange(30,70);
             xPoints[i] = xGen;
-            if( 30 < xGen && xGen < 40 ){
+            if( 30 < xGen && xGen < 45 ){
                 // in former range, y value can be anything
                 yGen = randomWithRange(30,70);
                 yPoints[i] = yGen;
             }
-            if( 40 < xGen && xGen < 60 ){
+            if( 45 < xGen && xGen < 55 ){
                 // needs y below or above buffer zone
-                yGen = randomWithMultipleRanges(30,40,60,70);
+                yGen = randomWithMultipleRanges(30,45,55,70);
                 yPoints[i] = yGen;
             }
-            if( 60 < xGen && xGen < 70){
+            if( 55 < xGen && xGen < 70){
                 // in later range, y value can be anything
                 yGen = randomWithRange(30,70);
                 yPoints[i] = yGen;
             }
-
-
 
         }
 
@@ -401,8 +350,6 @@ public class ProjectApp {
                 yGen = randomWithRange(20,80);
                 yPoints[i] = yGen;
             }
-
-
 
         }
 
@@ -431,8 +378,6 @@ public class ProjectApp {
                 yPoints[i] = yGen;
             }
 
-
-
         }
 
 
@@ -443,9 +388,9 @@ public class ProjectApp {
         for(int i = numPointsNormal; i < numPoints; i++){
             xGen = randomWithRange( minX, maxX );
             xPoints[i] = xGen;
-            if( 40 < xGen && xGen < 60 ){
+            if( 45 < xGen && xGen < 55 ){
                 // y needs to be above or below buffer zone
-                yPoints[i] = randomWithMultipleRanges(minY, 40, 60, maxY);
+                yPoints[i] = randomWithMultipleRanges(minY, 45, 55, maxY);
             } else{
                 // y can be anything
                 yPoints[i] = randomWithRange(minY, maxY);
@@ -622,49 +567,6 @@ public class ProjectApp {
     }
 
 
-    /* generateCircle
-     * args: array of array of x coordinates and array of y coordinates
-     *
-     *
-     *
-    public static Object [] generateCircle(Object [] points){
-        // calculate center point and radius by extension
-        // generate points to be that circle
-        // return points
-
-        double [] xPoints = (double []) points[0];
-        double [] yPoints = (double []) points[1];
-
-        double x1 = xPoints[0]; double y1 = yPoints[0];
-        double x2 = xPoints[1]; double y2 = yPoints[1];
-
-        double diameter = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
-        double radius = diameter / 2.0;
-        double centerX = Math.abs(x2 - x1) / 2.0;
-        double centerY = Math.abs(y2 - y1) / 2.0;
-
-        // circle = radius^2 = x^2 + y^2
-        // y = sqrt( radius^2 - x^2 )
-
-        double [] xCirclePoints = new double [10];
-        double [] yCirclePoints = new double [10];
-        int counter = 0;
-        for(int i = 0; i < 10; i++){
-            xCirclePoints[counter] = counter;
-            xCirclePoints[counter+1] = counter;
-            yCirclePoints[counter] = Math.sqrt(Math.pow(radius,2) + Math.pow(counter,2));
-            yCirclePoints[counter+1] = -1 * Math.sqrt(Math.pow(radius,2) + Math.pow(counter,2));
-            counter += 2;
-        }
-
-        Object [] result = {xCirclePoints, yCirclePoints};
-        return result;
-    }
-    */
-
-
-
-
     /* Model Application Functions */
 
 
@@ -769,7 +671,7 @@ public class ProjectApp {
         double [] yPoints = (double []) points[1];
         int numPoints = xPoints.length;
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 3; i++) {
 
             double[] x = {xPoints[i]};
             double[] y = {yPoints[i]};
@@ -796,10 +698,12 @@ public class ProjectApp {
 
 
         // centered at (centerX,centerY)
-        double levels = numLevels * 10; // Scale to 100 by 100 graph
+        double levels = (numLevels * 5) + 5; // Scale up due to graph's 100 by 100 dimensions
+        System.out.println("levels = " + levels);
         double positiveX; double negativeX;
         double positiveY; double negativeY;
-        for(int i = 10; i < levels; i+= 10){
+        int counter = 0;
+        for(int i = 5; i < levels; i += 5){
             positiveX = i + centerX; negativeX = (-1*i) + centerX;
             positiveY = i + centerY; negativeY = (-1*i) + centerY;
             xPoints = new double [numPoints]; yPoints = new double [numPoints];
@@ -810,12 +714,16 @@ public class ProjectApp {
             if( i == 10){
                 XYSeries series = chart.addSeries("Buffer for Point" + pointNumber, xPoints, yPoints);
                 series.setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+                counter++;
 
             }
             else{
-                XYSeries series = chart.addSeries("Expected Next Crime for Point #" + pointNumber, xPoints, yPoints);
+                XYSeries series = chart.addSeries("Lvl" + counter + " for Point #" + pointNumber, xPoints, yPoints);
                 series.setXYSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+                counter++;
             }
+
+
 
         }
 

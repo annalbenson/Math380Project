@@ -23,7 +23,7 @@ public class ProjectApp {
     public static final String COMBINED_NAME_1 = "combined_1.txt";
 
 
-    public static final int NUM_POINTS_1 = 500; // used in data generation
+    public static final int NUM_POINTS_1 = 100; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
@@ -149,7 +149,7 @@ public class ProjectApp {
 */
 
 
-
+/*
         // Normal
         normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
@@ -166,8 +166,9 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         displayChart(normalChart1);
+        */
 
-
+/*
         // Combined
         combinedDist(COMBINED_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart combinedChart1 = makeChart(COMBINED_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
@@ -184,6 +185,14 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         displayChart(combinedChart1);
+  */
+
+
+        // Model Three
+
+
+
+
 
 
     }
@@ -427,9 +436,18 @@ public class ProjectApp {
         //Need to make buffer zone
 
         // Uniform
+
         for(int i = numPointsNormal; i < numPoints; i++){
-            xPoints[i] = randomWithRange( minX, maxX );
-            yPoints[i] = randomWithRange( minY, maxY );
+            xGen = randomWithRange( minX, maxX );
+            xPoints[i] = xGen;
+            if( 40 < xGen && xGen < 60 ){
+                // y needs to be above or below buffer zone
+                yPoints[i] = randomWithMultipleRanges(minY, 40, 60, maxY);
+            } else{
+                // y can be anything
+                yPoints[i] = randomWithRange(minY, maxY);
+            }
+
         }
 
         // Write to file
@@ -600,11 +618,12 @@ public class ProjectApp {
         chart.addSeries(seriesName, xPoints, yPoints );
     }
 
+
     /* generateCircle
      * args: array of array of x coordinates and array of y coordinates
      *
      *
-     * */
+     *
     public static Object [] generateCircle(Object [] points){
         // calculate center point and radius by extension
         // generate points to be that circle
@@ -638,6 +657,7 @@ public class ProjectApp {
         Object [] result = {xCirclePoints, yCirclePoints};
         return result;
     }
+    */
 
 
 
@@ -738,9 +758,16 @@ public class ProjectApp {
      * args:
      * output:
      * */
-    public static void modelThree(){
+    public static void modelThree(XYChart chart, Object [] points){
 
         // plot first point, two squares around it
+
+        double [] xPoints = (double []) points[0];
+        double [] yPoints = (double []) points[1];
+        int numPoints = xPoints.length;
+
+
+
 
 
 

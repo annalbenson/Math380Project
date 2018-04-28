@@ -20,31 +20,29 @@ public class ProjectApp {
     public static final String NORMAL_NAME_1 = "normal_1.txt";
     public static final String NORMAL_NAME_2 = "normal_2.txt";
     public static final String NORMAL_NAME_3 = "normal_3.txt";
+    public static final String COMBINED_NAME_1 = "combined_1.txt";
 
 
-    public static final int NUM_POINTS_1 = 50; // used in data generation
+    public static final int NUM_POINTS_1 = 500; // used in data generation
     public static final int NUM_POINTS_2 = 50;
     public static final int NUM_POINTS_3 = 50;
 
     /* Graph Titles */
+    public static final String BOSTON_GRAPH_NAME_1 = "Boston Strangler Graph - All Data";
+    public static final String BOSTON_GRAPH_NAME_2 = "Boston Strangler Graph - Outlier Removed";
     public static final String UNIFORM_GRAPH_NAME_1 = "Uniform Graph 1";
     public static final String UNIFORM_GRAPH_NAME_2 = "Uniform Graph 2";
     public static final String UNIFORM_GRAPH_NAME_3 = "Uniform Graph 3";
-    public static final String BOSTON_GRAPH_NAME_1 = "Boston Strangler Graph - All Data";
-    public static final String BOSTON_GRAPH_NAME_2 = "Boston Strangler Graph - Outlier Removed";
-
     public static final String NORMAL_GRAPH_NAME_1 = "Normal Graph 1";
     public static final String NORMAL_GRAPH_NAME_2 = "Normal Graph 2";
     public static final String NORMAL_GRAPH_NAME_3 = "Normal Graph 3";
+    public static final String COMBINED_GRAPH_NAME_1 = "Combined Graph 1";
 
     /* Graph Axes Titles */
     public static final String X_AXIS_TITLE_X = "X";
     public static final String Y_AXIS_TITLE_Y = "Y";
     public static final String X_AXIS_TITLE_X_LONGITUDE = "Longitude";
     public static final String Y_AXIS_TITLE_Y_LATITUDE = "Latitude";
-
-
-
 
 
     public static void main(String [] args){
@@ -94,20 +92,9 @@ public class ProjectApp {
 
 
 
-        //displayChart(normalChart1);
 
 
-        //Object [] c_of_m = modelTwo(resultN1);
-        //double [] xPoints = c_of_m[0];
-        //double [] yPoints = c_of_m[1];
-
-        //addSeries(normalChart1, "c of m", c_of_m );
-
-        //displayChart(normalChart1);
-
-        //displayChart(uniformChart1);
-
-
+        /*
         // Boston Strangler -- All Data
         XYChart bostonStranglerChart1 = makeChart(BOSTON_GRAPH_NAME_1, X_AXIS_TITLE_X_LONGITUDE, Y_AXIS_TITLE_Y_LATITUDE, 100, 100);
         Object [] resultBS1 = loadFromFile(BOSTON_STRANGLER_NAME);
@@ -123,7 +110,7 @@ public class ProjectApp {
         // Model 3 - Markov
         // Display Graph
         displayChart(bostonStranglerChart1);
-
+        */
 
         /*
         // Boston Strangler -- Outlier Removed
@@ -161,7 +148,8 @@ public class ProjectApp {
         //displayChart(uniformChart1);
 */
 
-        /*
+
+
         // Normal
         normalDist(NORMAL_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
         XYChart normalChart1 = makeChart(NORMAL_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
@@ -177,22 +165,26 @@ public class ProjectApp {
         addSeries(normalChart1,"Center of Mass", resultModelTwoN1);
         // Model 3 - Markov
         // Display Graph
-        //displayChart(normalChart1);
-           */
-        /*
-        // (0,0) (0,1) (1,0) (5,5)
-        double [] xPoints = {0,0,1,5};
-        double [] yPoints = {0,1,0,5};
-        Object [] resultModelOne = modelOne(xPoints, yPoints);
+        displayChart(normalChart1);
 
-        Object [] xyz = generateCircle(resultModelOne);
 
-        XYChart testChart = makeChart("Test Chart", X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
-        addSeries(testChart, "Points", xPoints, yPoints);
-        addSeries(testChart, "Farthest Points", resultModelOne );
-        addSeries(testChart, "Circle", xyz);
-        displayChart(testChart);
-        */
+        // Combined
+        combinedDist(COMBINED_NAME_1, NUM_POINTS_1, 0, 100, 0, 100);
+        XYChart combinedChart1 = makeChart(COMBINED_GRAPH_NAME_1, X_AXIS_TITLE_X, Y_AXIS_TITLE_Y, 100, 100);
+        Object [] resultC1 = loadFromFile(COMBINED_NAME_1);
+        addSeries(combinedChart1,"Data", resultC1 );
+        // Model 1 - Circle
+        double [] xPointsC1 = (double []) resultC1[0];
+        double [] yPointsC1 = (double []) resultC1[1];
+        Object [] resultModelOneC1 = modelOne(xPointsC1, yPointsC1);
+        addSeries(combinedChart1, "Farthest Points", resultModelOneC1);
+        // Model 2 - Center of Mass
+        Object [] resultModelTwoC1 = modelTwo(xPointsC1,yPointsC1);
+        addSeries(combinedChart1,"Center of Mass", resultModelTwoC1);
+        // Model 3 - Markov
+        // Display Graph
+        displayChart(combinedChart1);
+
 
     }
 
@@ -212,11 +204,11 @@ public class ProjectApp {
 
         // Generate points
         for(int i = 0; i < numPoints; i++){
-            xPoints[i] = randomWithRange( 0, maxX );
-            yPoints[i] = randomWithRange( 0, maxY );
+            xPoints[i] = randomWithRange( minX, maxX );
+            yPoints[i] = randomWithRange( minY, maxY );
         }
 
-        System.out.println("first point generated : (x,y) = "  + xPoints[0] + "," + yPoints[0]);
+        //System.out.println("first point generated : (x,y) = "  + xPoints[0] + "," + yPoints[0]);
 
         // Write to file
         writeToFile(filename, xPoints, yPoints);
@@ -261,10 +253,6 @@ public class ProjectApp {
             }
 
 
-            //xPoints[i] = randomWithMultipleRanges(30, 40, 60, 70 );
-            //xPoints[i] = randomWithRange(30,70 );
-            //yPoints[i] = randomWithMultipleRanges(30, 40, 60, 70);
-            //yPoints[i] = randomWithRange(30, 70);
 
         }
 
@@ -293,10 +281,6 @@ public class ProjectApp {
 
 
 
-            //xPoints[i] = randomWithMultipleRanges(20, 30, 70, 80 );
-            //xPoints[i] = randomWithRange(20,80);
-            //yPoints[i] = randomWithMultipleRanges(20, 30, 70, 80);
-            //yPoints[i] = randomWithRange(20, 80);
         }
 
 
@@ -326,11 +310,6 @@ public class ProjectApp {
 
 
 
-
-            //xPoints[i] = randomWithMultipleRanges(minX, 20, 80, maxX );
-            //xPoints[i] = randomWithRange(minX,maxX );
-            //yPoints[i] = randomWithMultipleRanges(minY, 20, 80, maxY);
-            //yPoints[i] = randomWithRange(minY, maxY);
         }
 
 
@@ -348,9 +327,113 @@ public class ProjectApp {
      *          This data is then written to a file with name "filename"
      * */
 
-    public static void combinedDist(String filename, int n, double minX, double maxX, double minY, double maxY){
+    public static void combinedDist(String filename, int numPoints, double minX, double maxX, double minY, double maxY){
+
+        // Note: still buffer zone; do half points general uniform, half points normal
+
+        double [] xPoints = new double [numPoints];
+        double [] yPoints = new double [numPoints];
 
 
+        int numPointsNormal =  (int) Math.floor(numPoints / 2);
+        int numPointsUniform =  numPoints - numPointsNormal;
+
+
+        // Normal Generation:
+
+        int firstNumPoints = (int) Math.floor(0.68 * numPointsNormal);
+        System.out.println("first num points = " + firstNumPoints);
+        double xGen; double yGen;
+        for(int i = 0; i < firstNumPoints; i++){
+
+            xGen = randomWithRange(30,70);
+            xPoints[i] = xGen;
+            if( 30 < xGen && xGen < 40 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(30,70);
+                yPoints[i] = yGen;
+            }
+            if( 40 < xGen && xGen < 60 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(30,40,60,70);
+                yPoints[i] = yGen;
+            }
+            if( 60 < xGen && xGen < 70){
+                // in later range, y value can be anything
+                yGen = randomWithRange(30,70);
+                yPoints[i] = yGen;
+            }
+
+
+
+        }
+
+        int secondNumPoints = (int) Math.floor(0.27 * numPointsNormal);
+        System.out.println("second num points = " + secondNumPoints);
+        for(int i = firstNumPoints; i < (firstNumPoints + secondNumPoints); i++){
+
+            xGen = randomWithRange(20,80);
+            xPoints[i] = xGen;
+            if( 20 < xGen && xGen < 30 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(20,80);
+                yPoints[i] = yGen;
+            }
+            if( 30 < xGen && xGen < 70 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(20,30,70,80);
+                yPoints[i] = yGen;
+            }
+            if( 70 < xGen && xGen < 80){
+                // in later range, y value can be anything
+                yGen = randomWithRange(20,80);
+                yPoints[i] = yGen;
+            }
+
+
+
+        }
+
+
+        int finalNumPoints = numPointsNormal - firstNumPoints - secondNumPoints;
+        System.out.println("final num points = " + finalNumPoints);
+        System.out.println("Left to generate = " + finalNumPoints);
+
+        for(int i = (firstNumPoints + secondNumPoints); i < numPointsNormal; i++){
+
+            xGen = randomWithRange(minX,maxX);
+            xPoints[i] = xGen;
+            if( minX < xGen && xGen < 20 ){
+                // in former range, y value can be anything
+                yGen = randomWithRange(minY,maxY);
+                yPoints[i] = yGen;
+            }
+            if( 20 < xGen && xGen < 80 ){
+                // needs y below or above buffer zone
+                yGen = randomWithMultipleRanges(20,30,70,80);
+                yPoints[i] = yGen;
+            }
+            if( 80 < xGen && xGen < maxX){
+                // in later range, y value can be anything
+                yGen = randomWithRange(minY,maxY);
+                yPoints[i] = yGen;
+            }
+
+
+
+        }
+
+
+        //Need to make buffer zone
+
+        // Uniform
+        for(int i = numPointsNormal; i < numPoints; i++){
+            xPoints[i] = randomWithRange( minX, maxX );
+            yPoints[i] = randomWithRange( minY, maxY );
+        }
+
+        // Write to file
+        writeToFile(filename, xPoints, yPoints);
 
     }
 
@@ -582,7 +665,7 @@ public class ProjectApp {
                     x1 = xPoints[i]; x2 = xPoints[j];
                     y1 = yPoints[i]; y2 = yPoints[j];
                     distance = Math.sqrt( Math.pow((x2-x1),2) + Math.pow((y2-y1),2));
-                    System.out.println("Distance =" + distance);
+                    //System.out.println("Distance =" + distance);
                     if( distance >= maxDistance ){
                         maxDistance = distance;
                         //idx1 = i; idx2 = 11  ;
@@ -598,7 +681,7 @@ public class ProjectApp {
         System.out.println("idx2 = " + idx2);
         x1 = xPoints[idx1]; y1 = yPoints[idx1];
         x2 = xPoints[idx2]; y2 = yPoints[idx2];
-        System.out.println("Farthest Points: " + "(" + x1 + "," + y1 + ")" + " and " + "(" + x2 + "," + y2 + ")" );
+        //System.out.println("Farthest Points: " + "(" + x1 + "," + y1 + ")" + " and " + "(" + x2 + "," + y2 + ")" );
 
         double [] xResult = {x1, x2};
         double [] yResult = {y1, y2};
